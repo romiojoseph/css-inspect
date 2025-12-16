@@ -1,0 +1,45 @@
+{
+    "manifest_version": 3,
+    "name": "CSS Inspect - Live Visualizer",
+    "version": "1.0",
+    "description": "Inspect CSS properties, box models, and fonts by hovering over elements.",
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "action": {
+        "default_title": "Toggle CSS Inspector",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png"
+        }
+    },
+    "commands": {
+        "toggle-inspector": {
+            "suggested_key": {
+                "default": "Alt+Shift+C",
+                "mac": "Alt+Shift+C"
+            },
+            "description": "Toggle the CSS Inspector"
+        }
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_idle"
+        }
+    ]
+}

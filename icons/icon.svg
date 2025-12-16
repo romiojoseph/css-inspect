@@ -1,0 +1,11 @@
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Background: Rounded Blue Square -->
+  <rect x="0" y="0" width="128" height="128" rx="28" fill="#2563eb"/>
+
+  <!-- The Code Brackets { } -->
+  <path d="M42 34 C 28 34, 32 58, 22 64 C 32 70, 28 94, 42 94" 
+        stroke="white" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        
+  <path d="M86 34 C 100 34, 96 58, 106 64 C 96 70, 100 94, 86 94" 
+        stroke="white" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
