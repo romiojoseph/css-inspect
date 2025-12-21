@@ -3,6 +3,7 @@ let isActive = false;
 let overlayRoot = null;
 let currentElement = null;
 let isPinned = false;
+let activeTab = 'inspector'; // 'inspector', 'structure', 'classes'
 
 // --- INITIALIZATION ---
 function initInspector() {
@@ -314,6 +315,214 @@ function initInspector() {
         }
         .attr-name { color: #059669; }
         .attr-val { color: #d97706; }
+
+        /* --- TAB NAVIGATION --- */
+        .tab-nav {
+            display: flex;
+            background: #f9fafb;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 8px;
+        }
+        
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            pointer-events: auto;
+            position: relative;
+            transition: all 0.2s;
+            font-family: var(--font-stack);
+        }
+        
+        .tab-btn:hover {
+            color: var(--text-main);
+            background: rgba(0,0,0,0.03);
+        }
+        
+        .tab-btn.active {
+            color: var(--text-accent);
+        }
+        
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 8px;
+            right: 8px;
+            height: 2px;
+            background: var(--text-accent);
+            border-radius: 2px 2px 0 0;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* --- STRUCTURE TREE --- */
+        .structure-container {
+            padding: 12px 8px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .structure-container::-webkit-scrollbar { width: 6px; }
+        .structure-container::-webkit-scrollbar-track { background: transparent; }
+        .structure-container::-webkit-scrollbar-thumb { background-color: #cbd5e0; border-radius: 10px; }
+        
+        .tree-node {
+            margin-left: 16px;
+            position: relative;
+        }
+        
+        .tree-node::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: #e5e7eb;
+        }
+        
+        .tree-node:last-child::before {
+            height: 10px;
+        }
+        
+        .tree-line {
+            display: flex;
+            align-items: center;
+            padding: 2px 4px;
+            margin: 1px 0;
+            border-radius: 4px;
+            cursor: default;
+            position: relative;
+        }
+        
+        .tree-line:hover {
+            background: rgba(37, 99, 235, 0.08);
+        }
+        
+        .tree-line::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            width: 8px;
+            height: 1px;
+            background: #e5e7eb;
+        }
+        
+        .tree-tag { color: #db2777; font-weight: 600; }
+        .tree-class { color: #d97706; }
+        .tree-id { color: #2563eb; }
+        
+        .tree-root {
+            margin-left: 0;
+        }
+        
+        .tree-root::before {
+            display: none;
+        }
+        
+        .tree-root > .tree-line::before {
+            display: none;
+        }
+        
+        /* --- CSS CLASSES LIST --- */
+        .classes-container {
+            padding: 12px 16px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .classes-container::-webkit-scrollbar { width: 6px; }
+        .classes-container::-webkit-scrollbar-track { background: transparent; }
+        .classes-container::-webkit-scrollbar-thumb { background-color: #cbd5e0; border-radius: 10px; }
+        
+        .classes-search {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: var(--font-stack);
+            margin-bottom: 12px;
+            outline: none;
+            transition: border-color 0.2s;
+            pointer-events: auto;
+        }
+        
+        .classes-search:focus {
+            border-color: var(--text-accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .classes-stats {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        
+        .classes-stats span {
+            background: #f3f4f6;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .classes-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .class-tag {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 1px solid #bae6fd;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: 'Menlo', monospace;
+            color: #0369a1;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.15s;
+        }
+        
+        .class-tag:hover {
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            border-color: #7dd3fc;
+            transform: translateY(-1px);
+        }
+        
+        .class-tag .count {
+            background: rgba(3, 105, 161, 0.15);
+            color: #0c4a6e;
+            padding: 1px 5px;
+            border-radius: 3px;
+            margin-left: 6px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .no-classes {
+            color: var(--text-secondary);
+            font-size: 12px;
+            text-align: center;
+            padding: 20px;
+        }
     `;
 
     const html = `
@@ -328,15 +537,38 @@ function initInspector() {
         
         <!-- Info Card -->
         <div class="info-card" id="info-card">
-            <div class="card-header">
-                <div class="header-info">
-                    <div class="tag-header" id="tag-header"></div>
-                    <div class="element-path" id="element-path"></div>
-                </div>
-                <div class="pin-button" id="pin-button" title="Pin Inspector (Alt+Click)">📌</div>
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="inspector">Inspector</button>
+                <button class="tab-btn" data-tab="structure">Structure</button>
+                <button class="tab-btn" data-tab="classes">CSS Classes</button>
             </div>
             
-            <div class="card-body" id="card-body"></div>
+            <!-- Inspector Tab (Default) -->
+            <div class="tab-content active" id="tab-inspector">
+                <div class="card-header">
+                    <div class="header-info">
+                        <div class="tag-header" id="tag-header"></div>
+                        <div class="element-path" id="element-path"></div>
+                    </div>
+                    <div class="pin-button" id="pin-button" title="Pin Inspector (Alt+Click)">📌</div>
+                </div>
+                <div class="card-body" id="card-body"></div>
+            </div>
+            
+            <!-- Structure Tab -->
+            <div class="tab-content" id="tab-structure">
+                <div class="structure-container" id="structure-tree"></div>
+            </div>
+            
+            <!-- CSS Classes Tab -->
+            <div class="tab-content" id="tab-classes">
+                <div class="classes-container" id="classes-container">
+                    <input type="text" class="classes-search" id="classes-search" placeholder="Search classes...">
+                    <div class="classes-stats" id="classes-stats"></div>
+                    <div class="classes-list" id="classes-list"></div>
+                </div>
+            </div>
         </div>
     `;
 
@@ -346,6 +578,184 @@ function initInspector() {
 
     const pinButton = overlayRoot.getElementById("pin-button");
     pinButton.addEventListener("click", togglePin);
+
+    // Tab click handlers
+    const tabButtons = overlayRoot.querySelectorAll(".tab-btn");
+    tabButtons.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            switchTab(btn.dataset.tab);
+        });
+    });
+
+    // Classes search handler
+    const searchInput = overlayRoot.getElementById("classes-search");
+    searchInput.addEventListener("input", (e) => {
+        filterClasses(e.target.value);
+    });
+}
+
+// --- TAB SWITCHING ---
+function switchTab(tabName) {
+    if (!overlayRoot) return;
+    activeTab = tabName;
+
+    // Update tab buttons
+    const tabButtons = overlayRoot.querySelectorAll(".tab-btn");
+    tabButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tabName);
+    });
+
+    // Update tab content
+    const tabContents = overlayRoot.querySelectorAll(".tab-content");
+    tabContents.forEach(content => {
+        content.classList.toggle("active", content.id === `tab-${tabName}`);
+    });
+
+    // Auto-pin when switching away from inspector to allow interaction
+    if (tabName !== 'inspector' && !isPinned) {
+        togglePin();
+    }
+
+    // Generate content for the active tab
+    if (tabName === 'structure') {
+        generateStructureTree();
+    } else if (tabName === 'classes') {
+        generateCSSClassesList();
+    }
+}
+
+// --- STRUCTURE TREE GENERATION ---
+function generateStructureTree() {
+    if (!overlayRoot) return;
+
+    const container = overlayRoot.getElementById("structure-tree");
+    if (!container) return;
+
+    // Generate tree starting from body
+    const tree = buildTreeHTML(document.body, 0, true);
+    container.innerHTML = tree;
+}
+
+function buildTreeHTML(element, depth = 0, isRoot = false) {
+    // Skip script, style, noscript, and our inspector elements
+    const skipTags = ['SCRIPT', 'STYLE', 'NOSCRIPT', 'LINK', 'META'];
+    if (skipTags.includes(element.tagName) || element.id === 'live-inspector-host') {
+        return '';
+    }
+
+    const tagName = element.tagName.toLowerCase();
+    const classes = element.className && typeof element.className === 'string'
+        ? element.className.trim().split(/\s+/).filter(c => c).map(c => `.${c}`).join('')
+        : '';
+    const id = element.id ? `#${element.id}` : '';
+
+    // Build the line content
+    let lineContent = `<span class="tree-tag">${tagName}</span>`;
+    if (id) lineContent += `<span class="tree-id">${id}</span>`;
+    if (classes) lineContent += `<span class="tree-class">${classes}</span>`;
+
+    let html = `<div class="tree-node${isRoot ? ' tree-root' : ''}">`;
+    html += `<div class="tree-line">${lineContent}</div>`;
+
+    // Get child elements (not text nodes)
+    const children = Array.from(element.children);
+
+    // Limit depth and children for performance
+    if (depth < 15 && children.length > 0) {
+        const visibleChildren = children.slice(0, 50); // Limit children shown
+        visibleChildren.forEach(child => {
+            html += buildTreeHTML(child, depth + 1, false);
+        });
+
+        if (children.length > 50) {
+            html += `<div class="tree-node"><div class="tree-line" style="color: #9ca3af; font-style: italic;">... and ${children.length - 50} more elements</div></div>`;
+        }
+    }
+
+    html += '</div>';
+    return html;
+}
+
+// --- CSS CLASSES LIST GENERATION ---
+let allClassesData = []; // Store for filtering
+
+function generateCSSClassesList() {
+    if (!overlayRoot) return;
+
+    const statsContainer = overlayRoot.getElementById("classes-stats");
+    const listContainer = overlayRoot.getElementById("classes-list");
+    const searchInput = overlayRoot.getElementById("classes-search");
+
+    if (!listContainer) return;
+
+    // Collect all classes from the page
+    const classMap = new Map();
+    const allElements = document.querySelectorAll('*');
+
+    allElements.forEach(el => {
+        if (el.id === 'live-inspector-host') return;
+        if (el.className && typeof el.className === 'string') {
+            const classes = el.className.trim().split(/\s+/).filter(c => c);
+            classes.forEach(cls => {
+                classMap.set(cls, (classMap.get(cls) || 0) + 1);
+            });
+        }
+    });
+
+    // Convert to array and sort by count (descending)
+    allClassesData = Array.from(classMap.entries())
+        .sort((a, b) => b[1] - a[1]);
+
+    // Update stats
+    statsContainer.innerHTML = `
+        <span>📦 ${allClassesData.length} unique classes</span>
+        <span>🏷️ ${Array.from(classMap.values()).reduce((a, b) => a + b, 0)} total usages</span>
+    `;
+
+    // Clear search
+    if (searchInput) searchInput.value = '';
+
+    // Render the list
+    renderClassesList(allClassesData);
+}
+
+function renderClassesList(classesArray) {
+    if (!overlayRoot) return;
+    const listContainer = overlayRoot.getElementById("classes-list");
+    if (!listContainer) return;
+
+    if (classesArray.length === 0) {
+        listContainer.innerHTML = '<div class="no-classes">No classes found</div>';
+        return;
+    }
+
+    let html = '';
+    classesArray.forEach(([className, count]) => {
+        html += `<div class="class-tag" data-class="${className}">${className}<span class="count">×${count}</span></div>`;
+    });
+
+    listContainer.innerHTML = html;
+
+    // Add click-to-copy functionality
+    const classTags = listContainer.querySelectorAll('.class-tag');
+    classTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            copyToClipboard(`.${tag.dataset.class}`);
+            showToast(`Copied: .${tag.dataset.class}`);
+        });
+    });
+}
+
+function filterClasses(query) {
+    if (!allClassesData.length) return;
+
+    const filtered = query.trim()
+        ? allClassesData.filter(([className]) =>
+            className.toLowerCase().includes(query.toLowerCase()))
+        : allClassesData;
+
+    renderClassesList(filtered);
 }
 
 // --- BOX MODEL CALCULATION ---
@@ -610,6 +1020,9 @@ function getElementPath(element) {
 function handleMouseMove(e) {
     if (!isActive || !overlayRoot || isPinned) return;
 
+    // If not in inspector tab, don't follow mouse or update element
+    if (activeTab !== 'inspector') return;
+
     // Hide host briefly to check element below
     const host = document.getElementById("live-inspector-host");
     if (host) host.style.display = 'none';
@@ -697,6 +1110,8 @@ function toggleInspector() {
         }
         currentElement = null;
         isPinned = false;
+        activeTab = 'inspector';
+        allClassesData = [];
         console.log("🔍 Inspector Inactive");
     }
 }
