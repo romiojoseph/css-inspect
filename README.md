@@ -1,35 +1,47 @@
-# CSS Inspect Chrome Extension
+# CSS Inspect
 
-*Disclaimer: This is a vibecoded project (For Chromium based browsers).*
+> Disclaimer: This is a (90% LLMs + 10% me) vibecoded project (For Chromium based browsers).
 
-A lightweight Chrome extension for inspecting CSS properties, box models, and typography in real-time.
+A lightweight, high-performance Chrome DevTools extension for inspecting CSS properties, authored variables, pseudo-states and box model geometries.
 
-While the extension is functional, I plan to make further changes and refinements in the future. I built this quickly for one of my use cases, and I’m sharing it as open source so anyone can clone the repository, use it, or build on top of it.
+*While the extension is functional, I plan to make further changes and refinements in the future. I built this quickly for one of my use cases, and I’m sharing it as open source so anyone can clone the repository, use it, or build on top of it.*
 
+---
 
 ## Features
 
-*   **Live Inspection:** Hover over any element to see computed styles immediately.
-* **Freezes the Info Card:** Freeze the info card (Alt + Click) so you can select text inside it.
-* **Copy CSS:** Copy the element's styles to clipboard (Ctrl + Shift + Click).
-* **Close Inspector:** Close the inspector (Esc).
+* **Real-Time Live Inspection:** Hover over any DOM element to instantly view its tag hierarchy, dimensions, typography, layout properties, and box model.
+* **Authored Styles & CSS Variable Resolution:** View authored stylesheet rules alongside computed values, with dynamic recursive resolution for CSS custom properties (`var(--...)`).
+* **Pseudo-Class Inspection:** Toggle between `Normal`, `:hover`, `:active`, and `:focus` states. Indicators highlight when matching stylesheet rules exist.
+* **Freeze & Lock Selection:** <kbd>Ctrl</kbd> + <kbd>Click</kbd> (or <kbd>Cmd</kbd> + <kbd>Click</kbd>) any element to lock the inspector on it. Click anywhere or press <kbd>Esc</kbd> to unlock.
+* **DOM Hierarchy Navigation:**
+  * <kbd>↑</kbd> Select Parent Element
+  * <kbd>↓</kbd> Select First Child Element
+  * <kbd>←</kbd> / <kbd>→</kbd> Select Previous / Next Sibling
+  * Clickable DOM breadcrumb bar in header
+* **Copy Code:**
+  * **CSS Rules:** Matched stylesheet declarations including base, `:hover`, and `:active` blocks.
+  * **React Style:** CamelCase JSX `style={{ ... }}` objects
+* **Screen-Corner Docking:** Toggle HUD placement across all 4 screen corners (Top-Left, Top-Right, Bottom-Left, Bottom-Right).
+
+---
+
+## Shortcuts
+
+| Action | Shortcut |
+| :--- | :--- |
+| **Lock / Unlock Element** | <kbd>Ctrl</kbd> + <kbd>Click</kbd> (or <kbd>Cmd</kbd> + <kbd>Click</kbd>) |
+| **Parent / Child Element** | <kbd>↑</kbd> / <kbd>↓</kbd> |
+| **Sibling Element** | <kbd>←</kbd> / <kbd>→</kbd> |
+| **Unlock / Close** | <kbd>Esc</kbd> |
+
+---
 
 ## Installation
 
-Since this extension is not published on the Chrome Web Store, you must install it manually in Developer Mode.
+Clone this repo somehwere in your system. 
 
-1.  **Clone or Download:**
-    Clone this repository to your local machine or download the source code as a ZIP file and extract it.
-
-2.  **Open Extensions Management:**
-    Open Google Chrome and navigate to the following URL:
-    `chrome://extensions/`
-
-3.  **Enable Developer Mode:**
-    In the top-right corner of the Extensions page, toggle the switch for **Developer mode** to ON.
-
-4.  **Load Unpacked Extension:**
-    Click the **Load unpacked** button that appears in the top-left area. Select the folder containing the extension files (the folder where `manifest.json` is located).
-
-5.  **Pin the Extension:**
-    Click the puzzle piece icon in your Chrome toolbar and click the **Pin** icon next to "CSS Inspect" to keep it accessible.
+1. Open Google Chrome and navigate to `chrome://extensions/`.
+2. Enable **Developer mode** in the top-right corner.
+3. Click **Load unpacked** and select the repository you just cloned.
+4. Pin **CSS Inspect** to your toolbar or use <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>.
